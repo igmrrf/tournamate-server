@@ -10,7 +10,7 @@ namespace UseCase.Services
 {
     public class ForgotPassword
     {
-        public record ForgotPasswordCommand(string Email, string url) : IRequest;
+        public record ForgotPasswordCommand(string Email, string Url) : IRequest;
 
         public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, IEmailProvider emailProvider, IGenerateToken generateToken) : IRequestHandler<ForgotPasswordCommand>
         {
