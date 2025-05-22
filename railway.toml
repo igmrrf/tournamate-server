@@ -1,0 +1,7 @@
+# railway.toml
+[build]
+dockerfilePath = "Api/Dockerfile"
+context = "Api"
+
+[deploy]
+startCommand = ""  # Railway uses CMD in Dockerfile by default; override if needed
