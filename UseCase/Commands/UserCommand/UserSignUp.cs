@@ -18,6 +18,7 @@ namespace UseCase.Commands.UserCommand
             public required string Email { get; set; }
             public required string Country { get; set; }
             public required string Password { get; set; }
+            public required string Url { get; set; }
         }
 
         public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, IEmailProvider emailProvider, IGenerateToken tokenGenerator) : IRequestHandler<UserSignUpCommand>
@@ -40,7 +41,7 @@ namespace UseCase.Commands.UserCommand
 
                 var response = await tokenGenerator.GenerateEmailConfirmationToken(command.Email);
 
-                var callBackUrl = $"https://frontend/verify-email?userId={response.UserId}&token={response.Token}";
+                var callBackUrl = $"{command.Url}?userId={response.UserId}&token={response.Token}";
 
                 await emailProvider.SendEmailVerificationMessage(response.Name, command.Email, callBackUrl);
 

@@ -10,7 +10,7 @@ namespace UseCase.Services
 {
     public class ForgotPassword
     {
-        public record ForgotPasswordCommand(string Email) : IRequest;
+        public record ForgotPasswordCommand(string Email, string url) : IRequest;
 
         public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, IEmailProvider emailProvider, IGenerateToken generateToken) : IRequestHandler<ForgotPasswordCommand>
         {
@@ -25,7 +25,7 @@ namespace UseCase.Services
 
                 var token = await generateToken.GeneratePasswordResetToken(request.Email);
 
-                var callBackUrl = $"https://frontend/verify-email?userId={token.UserId}&token={token.Token}";
+                var callBackUrl = $"{request.Url}?userId={token.UserId}&token={token.Token}";
 
                 await emailProvider.SendForgotPasswordLink(getUser.UserName,  request.Email, callBackUrl);
             }
