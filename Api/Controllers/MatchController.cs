@@ -1,19 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using static UseCase.Queries.Matches.MatchesInTournamentRound;
 
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MatchController : ControllerBase
+    public class MatchController(IMediator mediator) : ControllerBase
     {
         //tournament must have start first before the system can display whos playing against who
         //but number of registered team and players should be visible brofre a tournament start
-        //[HttpGet("GetTournamentDetails/{tournamentId}")]
-        //public Task<IActionResult> GetTournamentDetails()
-        //{
-        //    //Full detail including match
-
-        //}
+        [HttpGet("GetMatchesInRound/{tournamentId}")]
+        public async Task<IActionResult> GetTournamentDetails(Guid tournamentId, int round, CancellationToken cancellationToken)
+        {
+            var request = new GetMatchesInRoundHandler(tournamentId, round);
+            var result = await mediator.Send(request);
+            return Ok(result);
+        }
     }
 }

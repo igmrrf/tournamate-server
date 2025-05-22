@@ -14,5 +14,6 @@ namespace UseCase.Contracts.Repositories
         Task DeleteAsync(Tournament tournament);
         Task<ICollection<Tournament>> ListOfTournament(Expression<Func<Tournament, bool>> predicate);
         Task<Tournament?> GetTournamentDetail(Expression<Func<Tournament, bool>> predicate);
+        Task<Tournament?> GetTournamentRole(Expression<Func<Tournament, bool>> predicate);
     }
 }

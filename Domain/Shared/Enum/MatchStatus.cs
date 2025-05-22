@@ -5,9 +5,6 @@ namespace Domain.Shared.Enum
         Shedulled,
         Ongoing,
         Completed,
-        Cancelled,
-        Postponed,
-        Abandoned,
-        Pending
+        Cancelled
     }
 }

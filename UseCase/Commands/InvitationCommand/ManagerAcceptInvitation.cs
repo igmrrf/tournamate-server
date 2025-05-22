@@ -43,7 +43,7 @@ namespace UseCase.Commands.InvitationCommand
                     "AlreadyStarted", (int)HttpStatusCode.NotFound);
                 }
 
-                if (getTournament.TournamentMode == TournamentMode.player_VS_player)
+                if (getTournament.TournamentMode == TournamentMode.PlayerVsPlayer)
                 {
                     throw new UseCaseException($"Tournament Is Not A Team VS Team.",
                     "NotApplied", (int)HttpStatusCode.NotFound);

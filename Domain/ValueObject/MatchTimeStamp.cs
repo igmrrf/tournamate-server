@@ -5,22 +5,24 @@ namespace Domain.ValueObject
     public class MatchTimeStamp
     {
         public DateTime StartTime { get; private set; }
-        public DateTime StartDate { get; private set; }
+        public DateTime EndTime { get; private set; }
         public bool HasMatchbegan { get; private set; }
         public bool HasMatchEnded { get; private set; }
         public WhoWon WhoWon { get; private set; }
         public Guid UserId { get; private set; }
+        public Guid MatchId { get; private set; }
 
         public MatchTimeStamp(){}
 
-        public MatchTimeStamp(DateTime startTime, DateTime startDate, bool hasMatchbegan, bool hasMatchEnded, WhoWon whoWon, Guid userId)
+        public MatchTimeStamp(Guid matchId, DateTime startTime, DateTime endTime, bool hasMatchbegan, bool hasMatchEnded, WhoWon whoWon, Guid userId)
         {
             StartTime = startTime;
-            StartDate = startDate;
+            EndTime = endTime;
             HasMatchbegan = hasMatchbegan;
             HasMatchEnded = hasMatchEnded;
             WhoWon = whoWon;
             UserId = userId;
+            MatchId = matchId;
         }
 
 

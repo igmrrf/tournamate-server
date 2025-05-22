@@ -43,7 +43,7 @@ namespace UseCase.Queries.Tournament
                         NoOfTeam = getTournament.NoOfTeams
                     };
 
-                    if (getTournament.TournamentMode == TournamentMode.team_VS_team)
+                    if (getTournament.TournamentMode == TournamentMode.TeamVsTeam)
                     {
                         response.NoOfSubPlayer = getTournament.NoOfSubPlayers;
                     }

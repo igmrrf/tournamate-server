@@ -1,14 +1,14 @@
 using Infrastructure.InternalServices.EmailService;
 using Infrastructure.InternalServices.Jwt;
 using Infrastructure.Persistence.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UseCase.Contracts.InternalServices;
 using UseCase.Contracts.Repositories;
 using UseCase.Contracts.Services;
-using UseCase.Queries.Tournament;
+using UseCase.Exceptions;
 using UseCase.Services;
-using static UseCase.Services.LoginUser;
 
 namespace Infrastructure.Extensions;
 
@@ -22,6 +22,9 @@ public static class ServiceCollectionExtensions
             .AddScoped<ITeamRepository, TeamRepository>()
             .AddScoped<ITournamentRepository, TournamentRepository>()
             .AddScoped<IUnitOfWork, UnitOfWork>()
+            .AddScoped<IRoleRepository, RoleRepository>()
+            .AddScoped<IMatchRepository, MatchRepository>()
+            .AddScoped<IPermissionRepository, PermissionRepository>()
             ;
     }
 
@@ -32,6 +35,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IEmailProvider, EmailProvider>()
             .AddScoped<IUserService, UserService>()
             .AddScoped<IGenerateToken, GenerateToken>()
+            .AddScoped<IAuthorizationHandler, TournamentRoleHandler>()
             ;
     }
 

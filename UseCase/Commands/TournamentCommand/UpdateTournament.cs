@@ -4,6 +4,7 @@ using System.Net;
 using Domain.Aggregate.TournamentAggregate;
 using Domain.Enum;
 using Domain.Shared.Enum;
+using Domain.ValueObject;
 using MediatR;
 using UseCase.Contracts.Repositories;
 using UseCase.Contracts.Services;
@@ -69,16 +70,16 @@ namespace UseCase.Commands.TournamentCommand
 
                     foreach (var userPermit in command.Permissions)
                     {
+                        var userId = users.First(u => u.UserName == userPermit.UserName).Id;
                         var permit = new Permission(
-                            userPermit.UserName,
                             command.TournamentId,
                             userPermit.CanUpdateScore,
                             userPermit.CanRecordFoul,
                             userPermit.CanMakeSubstitutions,
-                            userPermit.CanUpdateTimeStamp
+                            userPermit.CanUpdateTimeStamp,
+                            userId
                         );
 
-                        var userId = users.First(u => u.UserName == userPermit.UserName).Id;
                         getTournament.AssignPermission(userId, permit);
                     }
                 }

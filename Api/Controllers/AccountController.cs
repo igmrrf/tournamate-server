@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static UseCase.Commands.UserCommand.UserSignUp;
+using static UseCase.Queries.User.UserRole;
 using static UseCase.Services.ChangePassword;
 using static UseCase.Services.ForgotPassword;
 using static UseCase.Services.LoginUser;
@@ -85,6 +86,14 @@ namespace Api.Controllers
             }
             await mediator.Send(request, cancellationToken);
             return Ok();
+        }
+
+        [HttpGet("{tournamentId}/my-role")]
+        public async Task<IActionResult> GetUserRole([FromRoute] Guid tournamentId)
+        {
+            var request = new UserRoleCommand(tournamentId);
+            var result = await mediator.Send(request);
+            return Ok(result);
         }
     }
 }

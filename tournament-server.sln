@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{D258BC76-5C69-4561-9111-964C88895C90}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{A3F269A5-B6DA-4A3D-8377-EA09DD9CD9F3}"
@@ -30,5 +33,8 @@ Global
 		{050319AF-B8C3-415B-8109-8F3B40E95442}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{050319AF-B8C3-415B-8109-8F3B40E95442}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{050319AF-B8C3-415B-8109-8F3B40E95442}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

@@ -49,7 +49,7 @@ namespace UseCase.Commands.InvitationCommand
 
                 var user = await userService.LoggedInUser() ?? throw new NullReferenceException($"User not found.");
 
-                if (getTournament.TournamentMode == TournamentMode.team_VS_team)
+                if (getTournament.TournamentMode == TournamentMode.TeamVsTeam)
                 {
                     var getTeam = await teamRepository.GetAsync(t => t.Code == ExtractInvitationCode(request.Code)
                     && t.TournamentId == request.TournamentId) ??
@@ -72,7 +72,7 @@ namespace UseCase.Commands.InvitationCommand
 
                 }
 
-                if(getTournament.TournamentMode == TournamentMode.player_VS_player)
+                if(getTournament.TournamentMode == TournamentMode.PlayerVsPlayer)
                 {
                     var getTeam = await teamRepository.GetAsync(t => t.Code == request.Code
                     && t.TournamentId == request.TournamentId) ??

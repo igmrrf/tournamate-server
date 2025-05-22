@@ -24,7 +24,7 @@ namespace UseCase.Queries.Tournament
 
                 if (getTournament.Status != TournamentStatus.Draft)
                 {
-                    if (getTournament.TournamentMode == TournamentMode.player_VS_player)
+                    if (getTournament.TournamentMode == TournamentMode.PlayerVsPlayer)
                     {
                         return new BaseResponse<TournamentResponse>
                         {
@@ -43,7 +43,7 @@ namespace UseCase.Queries.Tournament
                             }
                         };
                     }
-                    else if (getTournament.TournamentMode == TournamentMode.team_VS_team)
+                    else if (getTournament.TournamentMode == TournamentMode.TeamVsTeam)
                     {
                         return new BaseResponse<TournamentResponse>
                         {

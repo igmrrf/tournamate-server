@@ -1,7 +1,6 @@
 using Domain.Shared.Entities;
 using Domain.Aggregate.TournamentAggregate;
 using System.Security.Cryptography;
-using Domain.ValueObject;
 namespace Domain.Entities;
 
 public class User : BaseEntity

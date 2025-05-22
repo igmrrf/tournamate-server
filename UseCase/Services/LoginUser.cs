@@ -42,29 +42,5 @@ namespace UseCase.Services
                                 "NotFound", (int)HttpStatusCode.NotFound);
             }
         }
-
-
-         public class UserService(IHttpContextAccessor accessor, IUserRepository userRepository) : IUserService
-        {
-            public async Task<User?> LoggedInUser()
-            {
-                try
-                {
-                    var userId = accessor?.HttpContext?.User?.Claims?.FirstOrDefault(u => u.Type == "Id")?.Value;
-                    var getUser = await userRepository.GetAsync(u => u.Id.ToString() == userId);
-                    return getUser;
-                }
-                catch (UseCaseException ex)
-                {
-                    throw new UseCaseException($"User Not Verified", 
-                                "NotVerified", (int)HttpStatusCode.NotFound);
-                }
-            }
-
-            
-        }
-
-
-
     }
 }

@@ -10,11 +10,9 @@ namespace Domain.Aggregate.TournamentAggregate
     public class Match : BaseEntity
     {
         public Guid TournamentId { get; private set; }
-        public int MatchNumber { get; private set; }
+        public int Round { get; private set; }
         public Guid HomeId { get; private set; }   
         public Guid AwayId { get; private set; }
-        public DateTime StartTime { get; private set; }
-        public DateTime EndTime { get; private set; }
         public MatchStatus MatchStatus { get; private set; }
         public MatchScore? MatchScore { get; private set; }
         public MatchSubstitution? MatchSubstitutions { get; private set; } 
@@ -24,28 +22,25 @@ namespace Domain.Aggregate.TournamentAggregate
         
 
         public Match() { }
-        public Match(Guid tournamentId, Guid homeId, Guid awayId, DateTime startTime, DateTime endTime, MatchStatus matchStatus)
+        public Match(Guid tournamentId, Guid homeId, Guid awayId,  MatchStatus matchStatus)
         {
             TournamentId = tournamentId;
             HomeId = homeId;
             AwayId = awayId;
-            StartTime = startTime;
-            EndTime = endTime;
             MatchStatus = matchStatus;
             MatchScore = new MatchScore(0, 0);
         }
 
-        public void UpdateMatch(Guid homeId, Guid awayId, DateTime startTime, DateTime endTime, MatchStatus matchStatus)
+        public void CancelMatch(Guid matchId)
         {
-            HomeId = homeId;
-            AwayId = awayId;
-            StartTime = startTime;
-            EndTime = endTime;
-            MatchStatus = matchStatus;
+            Id = matchId;
+            MatchStatus = MatchStatus.Cancelled;
+            //hgh
         }
 
-        public void UpdateMatchScore(MatchScore matchScore)
+        public void UpdateMatchScore(Guid matchId, MatchScore matchScore)
         {
+            Id = matchId;
             MatchScore = matchScore;
         }
 
@@ -61,13 +56,24 @@ namespace Domain.Aggregate.TournamentAggregate
 
         public void UpdateMatchTimeStamp(MatchTimeStamp matchTimeStamp)
         {
-            MatchTimeStamp = matchTimeStamp;
+            if (MatchStatus != MatchStatus.Cancelled) 
+            { 
+                if(matchTimeStamp.HasMatchbegan)
+                {
+                    MatchStatus = MatchStatus.Ongoing;
+                }
+                if (matchTimeStamp.HasMatchEnded)
+                {
+                    MatchStatus = MatchStatus.Completed;
+                }
+                MatchTimeStamp = matchTimeStamp;
+            }
         }
 
         public void SetHomeTeam(Guid teamId)
         {
-            if (MatchStatus != MatchStatus.Pending)
-                throw new DomainException("Can only set teams in pending matches");
+            //if (MatchStatus != MatchStatus.Pending)
+            //    throw new DomainException("Can only set teams in pending matches");
 
             HomeId = teamId;
             if (AwayId != null)
@@ -78,8 +84,8 @@ namespace Domain.Aggregate.TournamentAggregate
 
         public void SetAwayTeam(Guid teamId)
         {
-            if (MatchStatus != MatchStatus.Pending)
-                throw new DomainException("Can only set teams in pending matches");
+            //if (MatchStatus != MatchStatus.Pending)
+            //    throw new DomainException("Can only set teams in pending matches");
 
             AwayId = teamId;
             if (HomeId != null)

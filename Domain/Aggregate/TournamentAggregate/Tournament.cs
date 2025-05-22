@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using System.Numerics;
-using System.Text.RegularExpressions;
-using System.Text;
-using System;
+﻿
 using Domain.Aggregate.TournamentAggregate;
 using Domain.Enum;
 using Domain.Shared.Entities;
@@ -16,8 +12,7 @@ namespace Domain.Entities
     public class Tournament : BaseEntity
     {
 
-        //var tournamentRole = _tournamentService.GetUserRole(userId, tournamentId);
-        //var permissions = _tournamentService.GetUserPermissions(userId, tournamentId);
+        
         //public List<Permission?> Permissions { get; private set; } = new();
 
         //my thought process about the implementation is that once a tournament begins nobody and register for the tournament again which i av already implemented.the system now randomly selected team or player to player against them selfes depending on the tournament type, a user who is then given the permission to edit or update the match can now set the start time of each match in a tournament, he will also update other details as the tournament goes on like fouls, scores and substitution, whichever of the team that wins the system should move it to the next round till it get to final. also note that we also have knockout and home and away matches
@@ -41,24 +36,69 @@ namespace Domain.Entities
         private readonly List<TournamentRound> _rounds = new();
         public IReadOnlyCollection<TournamentRound> Rounds => _rounds.AsReadOnly();
         public List<TournamentRole> Participants { get; set; } = new();
+
+        public void StartTournament()
+        {
+            if (Status != TournamentStatus.Upcoming)
+                throw new DomainException("Only published tournaments can be started");
+
+            if (TournamentMode == TournamentMode.TeamVsTeam && CurrentTeamCount < 2)
+                throw new DomainException("Need at least 2 teams to start tournament");
+
+            if (TournamentMode == TournamentMode.PlayerVsPlayer && CurrentPlayerCount < 2)
+                throw new DomainException("Need at least 2 players to start tournament");
+
+            GenerateTournamentMatches();
+            Status = TournamentStatus.Ongoing;
+            //AddDomainEvent(new TournamentStartedEvent(Id));
+        }   
         public void GenerateTournamentMatches()
         {
             if (Status == TournamentStatus.Draft)
                 throw new DomainException("Tournament must be published to generate matches");
-            if (TournamentMode != TournamentMode.team_VS_team)
-                throw new DomainException("Match generation only supported for team vs team mode");
-            if (Teams.Count < 2)
-                throw new DomainException("Need at least 2 teams to generate matches");
+            if (Teams.Count < 2 || Players.Count < 2)
+                throw new DomainException("Need at least 2 teams or players to generate matches");
+
             _rounds.Clear();
-            if (TournamentType == TournamentType.Knock_Out)
-            {
-                GenerateKnockoutMatches();
-            }
-            else if (TournamentType == TournamentType.Home_AND_Away)
+            
+            if (TournamentType == TournamentType.Home_AND_Away && TournamentMode == TournamentMode.TeamVsTeam)
             {
                 GenerateHomeAwayMatches();
             }
+            else  
+            {
+                GenerateKnockoutMatches();
+            }
         }
+
+        public void MatchTime(DateTime startTime, DateTime endTime, bool hasMatchbegan, 
+            bool hasMatchEnded, WhoWon whoWon, Guid userId, Guid matchId)
+        {
+            if (!IsTournamentStarted)
+                throw new DomainException("Tournament hasn't started yet");
+
+            var match = _rounds.SelectMany(r => r.Matches)
+                .FirstOrDefault(m => m.Id == matchId)
+                ?? throw new DomainException("Match not found");
+
+            if (match.MatchStatus == MatchStatus.Cancelled)
+                throw new DomainException("Only scheduled matches can be assigned dates");
+
+            var time = new MatchTimeStamp(matchId, startTime, endTime, hasMatchbegan, hasMatchEnded, whoWon, userId);
+
+            match.UpdateMatchTimeStamp(time);
+        }
+
+        //public void MakeSubstitution(TeamId teamId, PlayerId playerOut, PlayerId playerIn)
+        //{
+        //    if (!IsTournamentStarted)
+        //        throw new DomainException("Tournament hasn't started");
+
+        //    var team = _teams.FirstOrDefault(t => t.Id == teamId)
+        //        ?? throw new DomainException("Team not found");
+
+        //    team.MakeSubstitution(playerOut, playerIn, NoOfSubPlayers);
+        //}
 
         private void GenerateHomeAwayMatches()
         {
@@ -96,11 +136,12 @@ namespace Domain.Entities
                     var homeTeam = teams[homeIndex];
                     var awayTeam = teams[awayIndex];
 
-                    var tournamentMatch = new TournamentMatch(
-                        new TournamentMatchId(Guid.NewGuid()),
+                    var tournamentMatch = new Match(
+                        Id,
                         homeTeam.Id,
                         awayTeam.Id,
-                        MatchStatus.Scheduled);
+                        MatchStatus.Shedulled
+                        );
 
                     tournamentRound.AddMatch(tournamentMatch);
                 }
@@ -140,19 +181,16 @@ namespace Domain.Entities
                 _rounds.Add(nextRound);
             }
 
-            // Find or create the next match for this winner
             var nextMatch = nextRound.Matches
             .FirstOrDefault(m => m.HomeId == null || m.AwayId == null);
 
             if (nextMatch == null)
             {
-                // Create new match in next round
+                // Create new match in next round    an error here dont forget the status
                 nextMatch = new Match(Id,
                      winnerId,
                     Guid.Empty,
-                    default,
-                    default,
-                    MatchStatus.Pending);
+                    MatchStatus.Shedulled);
                 nextRound.AddMatch(nextMatch);
             }
             else
@@ -173,7 +211,7 @@ namespace Domain.Entities
         private void GenerateKnockoutMatches()
         {
             var teams = Teams.ToList();
-            ShuffleTeams(teams); // Randomize team order
+            ShuffleTeams(teams); 
 
             // Handle cases where team count isn't power of 2
             int totalTeams = teams.Count;
@@ -189,8 +227,6 @@ namespace Domain.Entities
                 var match = new Match(Id,
                     teams[i].Id,
                     teams[i + 1].Id,
-                    default,
-                    default,
                     MatchStatus.Shedulled);
 
                 firstRound.AddMatch(match);
@@ -279,7 +315,7 @@ namespace Domain.Entities
         }
         public void AddPlayer(Player player)
         {
-            if (TournamentMode == TournamentMode.team_VS_team)
+            if (TournamentMode == TournamentMode.TeamVsTeam)
             {
                 throw new DomainException("Team is required in Team vs Team mode");
             }

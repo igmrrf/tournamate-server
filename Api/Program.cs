@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using UseCase.Exceptions;
 using static UseCase.Commands.TournamentCommand.SaveToDraft;
 
 
@@ -48,6 +49,18 @@ builder.Services.Configure<EmailOptionProvider>(builder.Configuration.GetSection
 
 builder.Services.AddRepository();
 builder.Services.AddServices(configuration);
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdmin", policy =>
+        policy.Requirements.Add(new TournamentRoleRequirement("Admin")));
+
+    options.AddPolicy("RequireReferee", policy =>
+        policy.Requirements.Add(new TournamentRoleRequirement("Referee")));
+
+    options.AddPolicy("RequireManager", policy =>
+        policy.Requirements.Add(new TournamentRoleRequirement("Manager")));
+});
 
 builder.Services.AddAuthentication(options =>
 {

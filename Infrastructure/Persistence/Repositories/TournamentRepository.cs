@@ -21,6 +21,12 @@ namespace Infrastructure.Persistence.Repositories
         {
             return await context.Tournament.Include(i => i.TournamentInfo).FirstOrDefaultAsync(predicate);
         }
+
+        public async Task<Tournament?> GetTournamentRole(Expression<Func<Tournament, bool>> predicate)
+        {
+            return await context.Tournament.Include(p => p.Participants).FirstOrDefaultAsync(predicate);
+        }
+
         public async Task<Tournament> CreateAsync(Tournament tournament)
         {
             await context.AddAsync(tournament);
