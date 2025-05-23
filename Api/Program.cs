@@ -36,7 +36,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 // Add Database
 
-var connectionString = builder.Configuration["DefaultConnection"];
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySQL(connectionString));
