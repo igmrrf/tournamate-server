@@ -14,7 +14,12 @@ namespace UseCase.Services
         public async Task<ConfirmationTokenResponse> GenerateEmailConfirmationToken(string email)
         {
             var getEmail = await userRepository.GetAsync(u => u.Email == email);
-            
+
+            if (getEmail == null) 
+            {
+                throw new UseCaseException($"{email} Not Found",
+                        "NotFound", (int)HttpStatusCode.NotFound);
+            }
 
             var token = new byte[32];
             using var rng = RandomNumberGenerator.Create();
