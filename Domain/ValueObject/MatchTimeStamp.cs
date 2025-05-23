@@ -1,8 +1,9 @@
 
+using Domain.Shared.Entities;
 using Domain.Shared.Enum;
 namespace Domain.ValueObject
 {
-    public class MatchTimeStamp
+    public class MatchTimeStamp : BaseEntity
     {
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }

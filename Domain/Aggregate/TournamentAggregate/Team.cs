@@ -10,7 +10,7 @@ namespace Domain.Aggregate.TournamentAggregate
         public  string Name { get; private set; } = default!;
         public string? Logo { get; private set; }
         public List<Player> Players { get; private set; } = new();
-        public List<Player> SubPlayers { get; private set; } = new();
+        //public List<Player> SubPlayers { get; private set; } = new();
         public int NoOfPlayer { get; private set; }
         public int NoOfSubPlayer { get; private set; }
         public Guid UserId { get; private set; }
@@ -36,14 +36,14 @@ namespace Domain.Aggregate.TournamentAggregate
 
         public void AddPlayerToTeam(Player player)
         {
-            if (Players.Count > NoOfPlayer)
+            if (NoOfPlayer > NoOfPlayer)
                 throw new DomainException("Cannot add more players to the team.");
             Players.Add(player);
         }
 
         public void AddSubPlayerToTeam(Player player)
         {
-            if (SubPlayers.Count > NoOfSubPlayer)
+            if (NoOfSubPlayer > NoOfSubPlayer)
                 throw new DomainException("Cannot add more players to the team.");
             Players.Add(player);
         }

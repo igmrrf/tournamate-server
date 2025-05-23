@@ -1,8 +1,10 @@
 
 
+using Domain.Shared.Entities;
+
 namespace Domain.ValueObject
 {
-    public class TournamentInfo
+    public class TournamentInfo : BaseEntity
     {
         public string Name { get; private set; } = default!;
         public string Information { get; private set; } = default!;
@@ -13,6 +15,8 @@ namespace Domain.ValueObject
         public DateTime DurationTime { get; private set; } 
         public bool IsPrivate { get; private set; }
         public string? TounamentThumbnail {  get; private set; }
+
+        public TournamentInfo() { }
 
         public TournamentInfo(string name, string information, string sportName, DateTime startDate, DateTime endDate, 
              int? checkInDuration, string? tounamentThumbnail, bool isPrivate )

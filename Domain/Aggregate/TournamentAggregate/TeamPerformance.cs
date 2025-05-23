@@ -1,8 +1,10 @@
 ﻿
 
+using Domain.Shared.Entities;
+
 namespace Domain.Aggregate.TournamentAggregate
 {
-    public class TeamPerformance
+    public class TeamPerformance : BaseEntity
     {
         public int MatchesPlayed { get; set; }
         public int Wins { get; set; }
@@ -13,5 +15,7 @@ namespace Domain.Aggregate.TournamentAggregate
         //3 point for win 1 point for draw
         public int TotalPoint { get; set; }
         public Guid TeamId { get; set; }
+    public TeamPerformance() { }
     }
+
 }

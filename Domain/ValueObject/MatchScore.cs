@@ -1,8 +1,10 @@
 ﻿
 
+using Domain.Shared.Entities;
+
 namespace Domain.ValueObject
 {
-    public class MatchScore
+    public class MatchScore : BaseEntity
     {
         public int HomeTeamScore { get; private  set; }
         public int AwayTeamScore { get; private set; }

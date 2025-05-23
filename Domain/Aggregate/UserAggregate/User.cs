@@ -18,7 +18,7 @@ public class User : BaseEntity
     public List<TournamentRole> Role { get; private set; }
     public DateTime RefreshTokenExpiration {get; private set;}
     public string RefreshToken { get; private set; }
-    public List<Guid> CreatedTournaments { get; private set; } = new();
+    //public List<Tournament> CreatedTournaments { get; private set; } = new();
     public List<Invitation> Invitations { get; private set; } = new();
 
     public User() { }

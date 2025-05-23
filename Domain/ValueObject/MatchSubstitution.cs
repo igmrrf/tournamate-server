@@ -1,8 +1,10 @@
 
 
+using Domain.Shared.Entities;
+
 namespace Domain.ValueObject
 {
-    public class MatchSubstitution
+    public class MatchSubstitution : BaseEntity
     {
         public Guid TeamId { get; private set; }
         public Guid PlayerInId { get; private set; }

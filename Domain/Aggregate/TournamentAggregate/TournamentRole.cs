@@ -11,5 +11,8 @@ namespace Domain.Aggregate.TournamentAggregate
         public Role Role { get; set; }
         public List<Permission> Permissions { get; set; } = new();
         public virtual Tournament Tournament { get; set; }
+
+        public TournamentRole() { }
     }
+
 }

@@ -1,8 +1,9 @@
+using Domain.Shared.Entities;
 using Domain.Shared.Enum;
 
 namespace Domain.Aggregate.TournamentAggregate
 {
-    public class Invitation
+    public class Invitation : BaseEntity
     {
         public Guid TournamentId { get; private set; }
         public Guid SenderId { get; private set; }
@@ -21,6 +22,8 @@ namespace Domain.Aggregate.TournamentAggregate
             Role = role;
             InvitationCode = invitationCode;
         }
+
+        public Invitation() { }
         
     }
 }

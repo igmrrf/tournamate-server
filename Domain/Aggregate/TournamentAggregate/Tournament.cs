@@ -37,6 +37,8 @@ namespace Domain.Entities
         public IReadOnlyCollection<TournamentRound> Rounds => _rounds.AsReadOnly();
         public List<TournamentRole> Participants { get; set; } = new();
 
+        public Tournament() { }
+
         public void StartTournament()
         {
             if (Status != TournamentStatus.Upcoming)

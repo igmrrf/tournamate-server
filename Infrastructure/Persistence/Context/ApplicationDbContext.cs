@@ -22,7 +22,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<MatchFoul> Fouls { get; set; }
     public DbSet<MatchTimeStamp> MatchTime { get; set; }
     public DbSet<MatchSubstitution> Subtitues { get; set; }
-    
+    public DbSet<Invitation> Invitations { get; set; }
+    public DbSet<TournamentInfo> TournamentInfos { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

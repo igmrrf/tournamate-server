@@ -1,8 +1,10 @@
 
 
+using Domain.Shared.Entities;
+
 namespace Domain.ValueObject
 {
-    public class MatchFoul
+    public class MatchFoul : BaseEntity
     {
         public int YellowCards { get; private set; }
         public int RedCards { get; private set; }

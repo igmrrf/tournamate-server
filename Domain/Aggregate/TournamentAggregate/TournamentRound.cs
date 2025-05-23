@@ -7,16 +7,18 @@ namespace Domain.Aggregate.TournamentAggregate
     public class TournamentRound : BaseEntity
     {
         private readonly List<Match> _matches = new();
-        private readonly List<Guid> _byesTeamId = new();
+        private readonly List<Team> _byesTeamId = new();
 
-        public int RoundNumber { get; }
+        public int RoundNumber { get; set; }
         public IReadOnlyCollection<Match> Matches => _matches.AsReadOnly();
-        public IReadOnlyCollection<Guid> Byes => _byesTeamId.AsReadOnly();
+        public IReadOnlyCollection<Team> Byes => _byesTeamId.AsReadOnly();
 
         public TournamentRound(int roundNumber)
         {
             RoundNumber = roundNumber;
         }
+
+        public TournamentRound() { }
 
         public void AddMatch(Match match)
         {
@@ -25,7 +27,11 @@ namespace Domain.Aggregate.TournamentAggregate
 
         public void AddBye(Guid teamId)
         {
-            _byesTeamId.Add(teamId);
+            var team = _byesTeamId.FirstOrDefault(t => t.Id == teamId);
+            if (team != null)
+            {
+                _byesTeamId.Add(team);
+            }
         }
     }
 }
