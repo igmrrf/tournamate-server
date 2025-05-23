@@ -41,23 +41,6 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-        // Load config from appsettings.json or environment
-
-        var relativePathToApi = Path.Combine("..", "api"); // Adjust as per your actual structure
-        Console.WriteLine($"Relative path segment to API: {relativePathToApi}");
-
-
-        var apiProjectDirectory = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "api"));
-
-        Console.WriteLine($"Calculated API project directory: {apiProjectDirectory}");
-
-        IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(apiProjectDirectory) // Set the base path to where appsettings.json actually resides
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true) // Good practice for dev settings
-            .Build();
-
-
         var connectionString = Environment.GetEnvironmentVariable("DEFAULT_CONNECTION");
 
         optionsBuilder.UseMySQL(connectionString);

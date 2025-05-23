@@ -28,7 +28,7 @@ public static class ServiceCollectionExtensions
             ;
     }
 
-    public static void AddServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddServices(this IServiceCollection services)
     {
             services
             .AddScoped<IJwtConfig, JwtConfig>()

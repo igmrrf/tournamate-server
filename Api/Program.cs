@@ -28,16 +28,18 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 builder.Host.UseSerilog();
 
-var configuration = builder.Configuration;
+builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 // Add Database
+
+var connectionString = builder.Configuration["DEFAULT_CONNECTION"];
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options
-            .UseMySQL(Environment.GetEnvironmentVariable("DEFAULT_CONNECTION")) );
+    options.UseMySQL(connectionString));
 
 builder.Services.AddMediatR(mR => mR.RegisterServicesFromAssemblies(typeof(SaveToDraftCommand).Assembly));
 
@@ -48,8 +50,17 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWT"))
 
 builder.Services.Configure<EmailOptionProvider>(builder.Configuration.GetSection("EmailOptionProvider"));
 
+builder.Services.Configure<EmailOptionProvider>(options =>
+{
+    options.SmtpServer = builder.Configuration["EMAIL_SMTP"] ?? "smtp.sendgrid.net";
+    options.SmtpPort = int.Parse(builder.Configuration["EMAIL_PORT"] ?? "587");
+    options.UserName = builder.Configuration["EMAIL_USERNAME"];
+    options.Password = builder.Configuration["EMAIL_PASSWORD"];
+    options.SenderEmail = builder.Configuration["EMAIL_SENDER"];
+});
+
 builder.Services.AddRepository();
-builder.Services.AddServices(configuration);
+builder.Services.AddServices();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -77,7 +88,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["JWT:Issuer"],
         ValidAudience = builder.Configuration["JWT:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"]))
     };
 });
 
