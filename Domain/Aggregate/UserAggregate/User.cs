@@ -17,7 +17,7 @@ public class User : BaseEntity
     public DateTime? PasswordResetTokenExpiry { get; private set; }
     public List<TournamentRole> Role { get; private set; }
     public DateTime RefreshTokenExpiration {get; private set;}
-    public string RefreshToken { get; private set; }
+    public string? RefreshToken { get; private set; }
     //public List<Tournament> CreatedTournaments { get; private set; } = new();
     public List<Invitation> Invitations { get; private set; } = new();
 

@@ -39,13 +39,15 @@ namespace UseCase.Commands.UserCommand
 
                 await userRepository.CreateAsync(newUser);
 
+                await unitOfWork.SaveChangesAsync(cancellationToken);
+
                 var response = await tokenGenerator.GenerateEmailConfirmationToken(command.Email);
 
                 var callBackUrl = $"{command.Url}?userId={response.UserId}&token={response.Token}";
 
                 await emailProvider.SendEmailVerificationMessage(response.Name, command.Email, callBackUrl);
 
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+                
             }
         }
     }

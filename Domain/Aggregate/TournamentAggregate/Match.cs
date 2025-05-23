@@ -16,9 +16,9 @@ namespace Domain.Aggregate.TournamentAggregate
         public MatchStatus MatchStatus { get; private set; }
         public MatchScore? MatchScore { get; private set; }
         public MatchSubstitution? MatchSubstitutions { get; private set; } 
-        public MatchFoul MatchFouls { get; private set; } = new();
+        public MatchFoul? MatchFouls { get; private set; } = new();
         public MatchTimeStamp? MatchTimeStamp { get; private set; }
-        public TeamPerformance TeamPerformance { get; private set; }
+        public TeamPerformance? TeamPerformance { get; private set; }
         
 
         public Match() { }
