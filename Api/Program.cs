@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Api.Middleware;
 using Infrastructure.Extensions;
@@ -122,6 +123,14 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 // Use middleware for exception handling
 app.UseMiddleware<ExceptionMiddleware>();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+}
+
+
 // Enable CORS
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 // Serve static files
@@ -134,7 +143,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 // Configure the HTTP request pipeline for development
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.MapOpenApi();
