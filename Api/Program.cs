@@ -37,7 +37,7 @@ builder.Services.AddControllers();
 // Add Database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options
-            .UseMySQL(builder.Configuration.GetConnectionString("ApplicationDbContext")) );
+            .UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")) );
 
 builder.Services.AddMediatR(mR => mR.RegisterServicesFromAssemblies(typeof(SaveToDraftCommand).Assembly));
 
@@ -124,11 +124,11 @@ var app = builder.Build();
 // Use middleware for exception handling
 app.UseMiddleware<ExceptionMiddleware>();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//    db.Database.Migrate();
+//}
 
 
 // Enable CORS
