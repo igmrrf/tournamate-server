@@ -49,7 +49,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWT"));
 
 builder.Services.Configure<EmailOptionProvider>(builder.Configuration.GetSection("EmailOptionProvider"));
-
+builder.Configuration.AddUserSecrets<Program>();
 builder.Services.Configure<EmailOptionProvider>(options =>
 {
     options.SmtpServer = builder.Configuration["EMAIL_SMTP"] ?? "smtp.sendgrid.net";
