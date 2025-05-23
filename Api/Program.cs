@@ -37,7 +37,7 @@ builder.Services.AddControllers();
 // Add Database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options
-            .UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")) );
+            .UseMySQL(Environment.GetEnvironmentVariable("DEFAULT_CONNECTION")) );
 
 builder.Services.AddMediatR(mR => mR.RegisterServicesFromAssemblies(typeof(SaveToDraftCommand).Assembly));
 
@@ -77,7 +77,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["JWT:Issuer"],
         ValidAudience = builder.Configuration["JWT:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")))
     };
 });
 

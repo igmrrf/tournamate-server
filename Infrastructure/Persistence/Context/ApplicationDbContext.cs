@@ -58,7 +58,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
             .Build();
 
 
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = Environment.GetEnvironmentVariable("DEFAULT_CONNECTION");
 
         optionsBuilder.UseMySQL(connectionString);
 
