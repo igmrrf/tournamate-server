@@ -41,8 +41,16 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-        var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
+        //var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
 
+        IConfigurationRoot configuration = new ConfigurationBuilder()
+    .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "..", "api"))
+    .AddJsonFile("appsettings.json", optional: false)
+    .Build();
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new InvalidOperationException("DEFAULT_CONNECTION env variable is not set.");
         optionsBuilder.UseMySQL(connectionString);
 
         return new ApplicationDbContext(optionsBuilder.Options);
