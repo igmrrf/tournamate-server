@@ -17,7 +17,7 @@ namespace Infrastructure.InternalServices.Jwt
         }
         private SigningCredentials GetSigningCredentials()
         {
-            var secret = Encoding.UTF8.GetBytes(_jwtSettings.Key);
+            var secret = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY"));
             return new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256);
         }
         public async Task<IEnumerable<Claim>> GetClaimsAsync(User user)

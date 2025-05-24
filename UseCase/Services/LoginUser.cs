@@ -30,9 +30,17 @@ namespace UseCase.Services
 
                 if(hashPassword)
                 {
-                    var refreshToken = getUser.SetRefreshToken();
-
+                    var refreshToken = string.Empty;
+                    if (string.IsNullOrEmpty(getUser.RefreshToken) || IsRefreshTokenExpired(getUser.RefreshTokenExpiration))
+                    {
+                         refreshToken = getUser.SetRefreshToken();
+                    }
+                    else
+                    {
+                         refreshToken = getUser.RefreshToken;
+                    }
                     var token = await jwtBearer.GenerateJwtAsync(getUser);
+
                     await unitOfWork.SaveChangesAsync(cancellationToken);
 
                     return new LoginResponseModel(token, refreshToken);
@@ -40,6 +48,11 @@ namespace UseCase.Services
 
                 throw new UseCaseException($"User Not FOund", 
                                 "NotFound", (int)HttpStatusCode.NotFound);
+            }
+
+            private bool IsRefreshTokenExpired(DateTime? expiration)
+            {
+                return !expiration.HasValue || expiration.Value < DateTime.UtcNow;
             }
         }
     }
