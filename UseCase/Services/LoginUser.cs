@@ -31,9 +31,9 @@ namespace UseCase.Services
                 if(hashPassword)
                 {
                     var refreshToken = getUser.SetRefreshToken();
-                    await unitOfWork.SaveChangesAsync(cancellationToken);
 
                     var token = await jwtBearer.GenerateJwtAsync(getUser);
+                    await unitOfWork.SaveChangesAsync(cancellationToken);
 
                     return new LoginResponseModel(token, refreshToken);
                 }

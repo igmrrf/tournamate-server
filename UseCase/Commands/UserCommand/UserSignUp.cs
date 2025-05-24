@@ -29,7 +29,7 @@ namespace UseCase.Commands.UserCommand
                 if (getEmail)
                 {
                     throw new UseCaseException($"Applicant with Gmail: {command.Email} already Exist", 
-                        "EmailALreadyExist", (int)HttpStatusCode.Conflict);
+                        "EmailALreadyExist", (int)HttpStatusCode.NotFound);
                 }
 
                 var salt = BCrypt.Net.BCrypt.GenerateSalt(10);

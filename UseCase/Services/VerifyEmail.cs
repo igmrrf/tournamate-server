@@ -16,7 +16,7 @@ namespace UseCase.Services
             public async Task Handle(VerifyEmailCommand request, CancellationToken cancellationToken)
             {
                 var getUser = await userRepository.GetAsync(u => u.Id == request.userId 
-                && u.PasswordResetToken == request.token);
+                && u.VerificationToken == request.token);
                 if (getUser is null)
                 {
                     throw new UseCaseException($"User Not Found",
@@ -26,7 +26,7 @@ namespace UseCase.Services
                 if (getUser.VerificationTokenExpiry < DateTime.UtcNow) 
                 {
                     throw new UseCaseException($"Verification Link TimeOut",
-                        "VerificationLinkTimeOut", (int)HttpStatusCode.Gone);
+                        "VerificationLinkTimeOut", (int)HttpStatusCode.NotFound);
                 }
 
                 getUser.Verify(request.userId);
