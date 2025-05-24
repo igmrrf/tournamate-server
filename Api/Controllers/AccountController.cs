@@ -42,10 +42,10 @@ namespace Api.Controllers
         }
 
 
-        [HttpGet("VerifyEmail")]
+        [HttpPost("VerifyEmail")]
         public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailCommand request, CancellationToken cancellationToken)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest("Invalid Input");
             }
@@ -57,7 +57,7 @@ namespace Api.Controllers
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand request, CancellationToken cancellationToken)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest("Invalid Input");
             }
@@ -69,7 +69,7 @@ namespace Api.Controllers
         [HttpPost("Forgot-Password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordCommand request, CancellationToken cancellationToken)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest("Invalid Input");
             }
@@ -80,7 +80,7 @@ namespace Api.Controllers
         [HttpPost("Reset-Password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand request, CancellationToken cancellationToken)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest("Invalid Input");
             }
