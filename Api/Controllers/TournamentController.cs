@@ -57,7 +57,7 @@ namespace Api.Controllers
             return Ok();
         }
 
-        [HttpPost("PublishTournament/{tournamentId}")]
+        [HttpPut("PublishTournament/{tournamentId}")]
         public async Task<IActionResult> TournamentStep2([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
         {
             var request = new PublishTournamentCommand(tournamentId);
@@ -65,7 +65,7 @@ namespace Api.Controllers
             return Ok();
         }
 
-        [HttpPost("DeleteTournament/{tournamentId}")]
+        [HttpPut("DeleteTournament/{tournamentId}")]
         public async Task<IActionResult> DeleteTournament([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
         {
             var request = new DeleteTournamentCommand(tournamentId);
@@ -73,7 +73,7 @@ namespace Api.Controllers
             return Ok();
         }
 
-        [HttpPost("SaveTournamentToDraft/{tournamentId}")]
+        [HttpPut("SaveTournamentToDraft/{tournamentId}")]
         public async Task<IActionResult> DraftTournament([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
         {
             var request = new SaveToDraftCommand(tournamentId);
@@ -81,7 +81,7 @@ namespace Api.Controllers
             return Ok();
         }
 
-        [HttpPost("StartTournament/{tournamentId}")]
+        [HttpPut("StartTournament/{tournamentId}")]
         public async Task<IActionResult> StartTournament([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
         {
             var request = new StartTournamentCommand(tournamentId);
