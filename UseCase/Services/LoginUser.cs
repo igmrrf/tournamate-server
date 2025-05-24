@@ -18,11 +18,13 @@ namespace UseCase.Services
         {
             public async Task<LoginResponseModel> Handle(LoginRequestModel request, CancellationToken cancellationToken)
             {
-                var getUser = await userRepository.GetAsync(u => u.Email == request.email) ?? throw new NullReferenceException($" Email {request.email} Can NOT Be Found");
+                var getUser = await userRepository.GetAsync(u => u.Email == request.email) ??
+                    throw new UseCaseException($"User Not FOund",
+                                "NotFound", (int)HttpStatusCode.NotFound);
 
                 if ( !getUser.IsVerified)
                 {
-                    throw new UseCaseException($"User Not Verified", 
+                    throw new UseCaseException($"Verify your email before login", 
                                 "NotVerified", (int)HttpStatusCode.NotFound);
                 }
 
