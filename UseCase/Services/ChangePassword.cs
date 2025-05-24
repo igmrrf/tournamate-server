@@ -17,22 +17,21 @@ namespace UseCase.Services
         {
             public async Task Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
             {
-                var user = await userService.LoggedInUser() ?? throw new NullReferenceException($"User not found.");
-
-                var getUser = await userRepository.GetAsync(u => u.Id == user.Id) ??
+                var user = await userService.LoggedInUser() ??
                     throw new UseCaseException($"User Not Found.",
-                    "UserNotFound", (int)HttpStatusCode.NotFound); ;
-                if (BCrypt.Net.BCrypt.Verify(request.oldPassword, getUser.PasswordHash))
+                    "UserNotFound", (int)HttpStatusCode.NotFound); 
+
+                if (BCrypt.Net.BCrypt.Verify(request.oldPassword, user.PasswordHash))
                 {
                     var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.newPassword);
-                    getUser.SetNewPassword(passwordHash, getUser.PasswordHashSalt, user.Id);
+                    user.SetNewPassword(passwordHash, user.PasswordHashSalt, user.Id);
                     await userRepository.UpdateUserAsync  (user);   
                     await unitOfWork.SaveChangesAsync(cancellationToken);
                 }
                 else
                 {
                     throw new UseCaseException($"Old Password is incorrect.",
-                    "OldPasswordIncorrect", (int)HttpStatusCode.BadRequest);
+                    "OldPasswordIncorrect", (int)HttpStatusCode.NotFound);
                 }
             }
         }

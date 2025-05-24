@@ -24,7 +24,7 @@ namespace Infrastructure.InternalServices.Jwt
         {
             var claims = new List<Claim>
             {
-                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new("Id", user.Id.ToString()),
                 new(ClaimTypes.Email, user.Email),
                 new(ClaimTypes.Name, user.UserName),
             };
@@ -36,7 +36,7 @@ namespace Infrastructure.InternalServices.Jwt
                 issuer: _jwtSettings.Issuer,           
                 audience: _jwtSettings.Audience,       
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.TokenExpirationInMinutes),
+                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInDays),
                 signingCredentials: signingCredentials);
 
             var tokenHandler = new JwtSecurityTokenHandler();

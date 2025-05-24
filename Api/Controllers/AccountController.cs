@@ -53,6 +53,7 @@ namespace Api.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand request, CancellationToken cancellationToken)
         {
