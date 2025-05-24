@@ -28,7 +28,6 @@ namespace Api.Controllers
             return Ok();
         }
 
-        [Authorize] 
         [HttpPost("Login")]
         public async Task<IActionResult> LoginAsync(LoginRequestModel request, CancellationToken cancellationToken)
         {
