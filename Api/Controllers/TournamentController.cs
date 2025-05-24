@@ -21,8 +21,9 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TournamentController(IMediator mediator, IUserTournament userTournament) : ControllerBase
+    public class TournamentController(IMediator mediator) : ControllerBase
     {
+        [Authorize]
         [HttpPost("CreateTournament/step1")]
         public async Task<IActionResult> TournamentStep1([FromBody] TournamentCommand request, CancellationToken cancellationToken)
         {
@@ -35,6 +36,7 @@ namespace Api.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpPost("CreateTournament/step2")]
         public async Task<IActionResult> CreateTournamentStep2([FromBody] UpdateTournamentCommand request, CancellationToken cancellationToken)
         {
@@ -43,6 +45,7 @@ namespace Api.Controllers
         }
 
         //if tournament time already begin edit from the frontend the button should not show
+        [Authorize]
         [HttpPost("EditTournament/step1")]
         public async Task<IActionResult> EditDraftTournament([FromBody] EditCommand request, CancellationToken cancellationToken)
         {
@@ -50,6 +53,7 @@ namespace Api.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpPost("EditTournament/step2")]
         public async Task<IActionResult> EditTournamentStep2([FromBody] UpdateTournamentCommand request, CancellationToken cancellationToken)
         {
@@ -57,6 +61,7 @@ namespace Api.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("PublishTournament/{tournamentId}")]
         public async Task<IActionResult> TournamentStep2([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
         {
@@ -65,6 +70,7 @@ namespace Api.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("DeleteTournament/{tournamentId}")]
         public async Task<IActionResult> DeleteTournament([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
         {
@@ -73,6 +79,7 @@ namespace Api.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("SaveTournamentToDraft/{tournamentId}")]
         public async Task<IActionResult> DraftTournament([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
         {
@@ -81,6 +88,7 @@ namespace Api.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("StartTournament/{tournamentId}")]
         public async Task<IActionResult> StartTournament([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
         {
@@ -89,6 +97,7 @@ namespace Api.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpGet("GetTournamentById/{tournamentId}")]
         public async Task<IActionResult> GetTournamentById([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
         {
@@ -101,6 +110,7 @@ namespace Api.Controllers
             return BadRequest();
         }
 
+        [Authorize]
         [HttpGet("GetDraftTournamentById/{tournamentId}")]
         public async Task<IActionResult> GetDraftTournamentById([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
         {
@@ -113,6 +123,7 @@ namespace Api.Controllers
             return BadRequest();
         }
 
+        [Authorize]
         [HttpPost("PlayerAcceptInvitation/{code}")]
         public async Task<IActionResult> PlayerAcceptInvitation([FromBody] PlayerAcceptInvitationCommand request, CancellationToken cancellationToken)
         {
@@ -120,6 +131,7 @@ namespace Api.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPost("ManagerAcceptInvitation")]
         public async Task<IActionResult> ManagerAcceptInvitation([FromBody] ManagerAcceptInviteCOmmand request, CancellationToken cancellationToken)
         {
@@ -128,7 +140,7 @@ namespace Api.Controllers
         }
 
 
-
+        [Authorize]
         [HttpGet("SearchTournamentByCode/{code}")]
         public async Task<IActionResult> SearchTournamentByCode([FromRoute] string code, CancellationToken cancellationToken)
         {
@@ -142,6 +154,7 @@ namespace Api.Controllers
         }
 
         //[Authorize(Policy = "RequireAdmin")]
+        [Authorize]
         [HttpGet("AllTournamentCreatedByUSer{status}")]
         public async Task<IActionResult> AllTournamentCreatedByUSer([FromRoute] int status, CancellationToken cancellationToken)
         {
