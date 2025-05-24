@@ -36,7 +36,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 // Add Database
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySQL(connectionString));
@@ -52,11 +52,11 @@ builder.Services.Configure<EmailOptionProvider>(builder.Configuration.GetSection
 builder.Configuration.AddUserSecrets<Program>();
 builder.Services.Configure<EmailOptionProvider>(options =>
 {
-    options.SmtpServer = builder.Configuration["EMAIL_SMTP"] ?? "smtp.sendgrid.net";
-    options.SmtpPort = int.Parse(builder.Configuration["EMAIL_PORT"] ?? "587");
-    options.UserName = builder.Configuration["EMAIL_USERNAME"];
-    options.Password = builder.Configuration["EMAIL_PASSWORD"];
-    options.SenderEmail = builder.Configuration["EMAIL_SENDER"];
+    options.SmtpServer =  "smtp.sendgrid.net";
+    options.SmtpPort = int.Parse("587");
+    options.UserName = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
+    options.Password = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
+    options.SenderEmail = Environment.GetEnvironmentVariable("EMAIL_SENDER");
 });
 
 builder.Services.AddRepository();
@@ -88,7 +88,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["JWT:Issuer"],
         ValidAudience = builder.Configuration["JWT:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")))
     };
 });
 
