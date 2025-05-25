@@ -17,6 +17,7 @@ namespace Infrastructure.Persistence.Repositories
             return await tournament.ToListAsync();
         }
 
+
         public async Task<Tournament?> GetTournamentDetail(Expression<Func<Tournament, bool>> predicate)
         {
             return await context.Tournament.Include(i => i.TournamentInfo).FirstOrDefaultAsync(predicate);
@@ -41,6 +42,15 @@ namespace Infrastructure.Persistence.Repositories
         public async Task<Tournament?> GetAsync(Expression<Func<Tournament, bool>> predicate)
         {
             return await context.Tournament.FirstOrDefaultAsync(predicate);
+        }
+
+        public async Task<Tournament?> GetTournamentWithParticipantAsync(Expression<Func<Tournament, bool>> predicate)
+        {
+            return await context.Tournament
+                .Include(u => u.TournamentInfo)
+                .Include(u => u.Participants)
+                .ThenInclude(p => p.Permissions)
+                .FirstOrDefaultAsync(predicate);
         }
 
         public async Task<bool> IsExistsAsync(Expression<Func<Tournament, bool>> expression)

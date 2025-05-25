@@ -62,10 +62,10 @@ namespace Api.Controllers
         }
 
         [Authorize]
-        [HttpPut("PublishTournament/{tournamentId}")]
-        public async Task<IActionResult> TournamentStep2([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
+        [HttpPut("PublishTournament/{tournamentId}/{url}")]
+        public async Task<IActionResult> TournamentStep2([FromRoute] string url, Guid tournamentId, CancellationToken cancellationToken)
         {
-            var request = new PublishTournamentCommand(tournamentId);
+            var request = new PublishTournamentCommand(tournamentId, url);
             await mediator.Send(request, cancellationToken);
             return Ok();
         }
