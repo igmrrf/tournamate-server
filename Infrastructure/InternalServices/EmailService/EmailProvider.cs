@@ -32,7 +32,7 @@ namespace Infrastructure.InternalServices.EmailService
             using var client = new MailKit.Net.Smtp.SmtpClient();
             try
             {
-                await client.ConnectAsync(Option.SmtpServer, Option.SmtpPort, false);
+                await client.ConnectAsync(Option.SmtpHost, Option.SmtpPort, false);
                 await client.AuthenticateAsync(Option.UserName, Option.Password);
                 await client.SendAsync(message);
             }
