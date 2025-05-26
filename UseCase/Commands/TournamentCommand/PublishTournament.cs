@@ -29,6 +29,11 @@ namespace UseCase.Commands.TournamentCommand
                     throw new UseCaseException($"Tournament Not Found.", 
                     "NotFound", (int)HttpStatusCode.NotFound);
 
+                if(getTournament.TournamentInfo.StartDate < DateTime.UtcNow)
+                {
+                    throw new UseCaseException($"Cannot publish tournament with a past start time.",
+                    "BadRequest", (int)HttpStatusCode.NotFound);
+                }
 
                 if (getTournament.Participants.Count >= 1)
                 {

@@ -27,7 +27,7 @@ namespace UseCase.Queries.Tournament
 
                 if (!getTournament.Any())
                 {
-                    throw new UseCaseException($"Tournament Not Found.",
+                    throw new UseCaseException($"You have not created any tournament.",
                     "NotFound", (int)HttpStatusCode.NotFound);
                 }
 

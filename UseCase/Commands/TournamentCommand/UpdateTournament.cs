@@ -4,7 +4,6 @@ using System.Net;
 using Domain.Aggregate.TournamentAggregate;
 using Domain.Enum;
 using Domain.Shared.Enum;
-using Domain.ValueObject;
 using MediatR;
 using UseCase.Contracts.Repositories;
 using UseCase.Contracts.Services;
@@ -55,7 +54,7 @@ namespace UseCase.Commands.TournamentCommand
 
                     foreach (var userName in userNames)
                     {
-                        var userref = users.FirstOrDefault(u => u.UserName == userName);
+                        var userref = users.FirstOrDefault(u => string.Equals(u.UserName, userName, StringComparison.OrdinalIgnoreCase));
                         if (userref is null)
                         {
                             throw new UseCaseException($"User  Name {userName} doesn't exist.", "NotFound", (int)HttpStatusCode.NotFound);
@@ -70,7 +69,7 @@ namespace UseCase.Commands.TournamentCommand
 
                     foreach (var userPermit in command.Permissions)
                     {
-                        var userId = users.First(u => u.UserName == userPermit.UserName).Id;
+                        var userId = users.First(u => string.Equals(u.UserName, userPermit.UserName, StringComparison.OrdinalIgnoreCase)).Id;
                         var permit = new Permission(
                             command.TournamentId,
                             userPermit.CanUpdateScore,

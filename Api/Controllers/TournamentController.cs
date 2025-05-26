@@ -110,18 +110,18 @@ namespace Api.Controllers
             return BadRequest();
         }
 
-        [Authorize]
-        [HttpGet("GetDraftTournamentById/{tournamentId}")]
-        public async Task<IActionResult> GetDraftTournamentById([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
-        {
-            var request = new GetDraftTournamentCommand(tournamentId);
-            var response = await mediator.Send(request, cancellationToken);
-            if (response.IsSuccessful)
-            {
-                return Ok(response);
-            }
-            return BadRequest();
-        }
+        //[Authorize]
+        //[HttpGet("GetDraftTournamentById/{tournamentId}")]
+        //public async Task<IActionResult> GetDraftTournamentById([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
+        //{
+        //    var request = new GetDraftTournamentCommand(tournamentId);
+        //    var response = await mediator.Send(request, cancellationToken);
+        //    if (response.IsSuccessful)
+        //    {
+        //        return Ok(response);
+        //    }
+        //    return BadRequest();
+        //}
 
         [Authorize]
         [HttpPost("PlayerAcceptInvitation/{code}")]

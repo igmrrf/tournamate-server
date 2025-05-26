@@ -7,7 +7,6 @@ using MediatR;
 using UseCase.Contracts.Repositories;
 using UseCase.Contracts.Services;
 using UseCase.Exceptions;
-using static UseCase.Commands.TournamentCommand.CreatTournament1.Handler;
 
 namespace UseCase.Commands.TournamentCommand
 {
@@ -15,16 +14,16 @@ namespace UseCase.Commands.TournamentCommand
     {
         public record TournamentCommand : IRequest<CreateTournamentResponse>
         {
-            public string Name { get; private set; } = default!;
-            public string Information { get; private set; } = default!;
-            public string SportName { get; private set; }
-            public string StartDate { get; private set; }
-            public string EndDate { get; private set; }
-            public string EndTime { get; private set; }
-            public string StartTime { get; private set; }
-            public int? CheckInDuration { get; private set; }
-            public bool IsPrivate { get; private set; }
-            public string? TounamentThumbnail {  get; private set; }
+            public string Name { get;  set; } = default!;
+            public string Information { get;  set; } = default!;
+            public string SportName { get;  set; }
+            public string StartDate { get;  set; }
+            public string EndDate { get;  set; }
+            public string EndTime { get;  set; }
+            public string StartTime { get;  set; }
+            public int? CheckInDuration { get;  set; }
+            public bool IsPrivate { get;  set; }
+            public string? TounamentThumbnail {  get;  set; }
         }
 
         
@@ -44,18 +43,17 @@ namespace UseCase.Commands.TournamentCommand
 
                 // Parse the date and time
                 DateTime dateStart = DateTime.ParseExact(command.StartDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                TimeSpan timeStart = TimeSpan.Parse(command.StartTime);
-                // Combine date and time
-                DateTime combinedStartDateTime = dateStart.Add(timeStart);
+                DateTime timeStart = DateTime.ParseExact(command.StartTime, "hh:mm tt", CultureInfo.InvariantCulture);
+                DateTime combinedStartDateTime = dateStart.Date.Add(timeStart.TimeOfDay);
 
-                if(combinedStartDateTime < DateTime.UtcNow)
+                if (combinedStartDateTime < DateTime.UtcNow)
                 {
                     throw new UseCaseException($"Start date and time cannot be in the past.", "InvalidStartDate", (int)HttpStatusCode.BadRequest);
                 }
 
-                DateTime endDate = DateTime.ParseExact(command.StartDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                TimeSpan startTime = TimeSpan.Parse(command.StartTime);
-                DateTime combinedEndDateTime = endDate.Add(startTime);
+                DateTime endDate = DateTime.ParseExact(command.EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                DateTime startTime = DateTime.ParseExact(command.EndTime, "hh:mm tt", CultureInfo.InvariantCulture);
+                DateTime combinedEndDateTime = endDate.Date.Add(startTime.TimeOfDay);
 
 
 

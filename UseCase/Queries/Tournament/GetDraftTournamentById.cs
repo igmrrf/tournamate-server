@@ -16,9 +16,9 @@ namespace UseCase.Queries.Tournament
     {
         public record GetDraftTournamentCommand(Guid TournamentId) : IRequest<BaseResponse<TournamentResponse>>;
 
-        public class Handler(ITournamentRepository tournamentRepository, IUserService userService) : IRequestHandler<GetTournamentCommand, BaseResponse<TournamentResponse>>
+        public class Handler(ITournamentRepository tournamentRepository, IUserService userService) : IRequestHandler<GetDraftTournamentCommand, BaseResponse<TournamentResponse>>
         {
-            public async Task<BaseResponse<TournamentResponse>> Handle(GetTournamentCommand request, CancellationToken cancellationToken)
+            public async Task<BaseResponse<TournamentResponse>> Handle(GetDraftTournamentCommand request, CancellationToken cancellationToken)
             {
                 var user = await userService.LoggedInUser() ?? throw new NullReferenceException($"User not found.");
 

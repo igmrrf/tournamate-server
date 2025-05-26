@@ -9,7 +9,6 @@ using MediatR;
 using UseCase.Contracts.Repositories;
 using UseCase.Contracts.Services;
 using UseCase.Exceptions;
-using static UseCase.Services.LoginUser;
 
 namespace UseCase.Commands.InvitationCommand
 {
@@ -29,12 +28,12 @@ namespace UseCase.Commands.InvitationCommand
         {
             public async Task Handle(PlayerAcceptInvitationCommand request, CancellationToken cancellationToken)
             {
-                var getTournament = await tournamentRepository.GetAsync(t => t.Id == request.TournamentId 
+                var getTournament = await tournamentRepository.GetTournamentDetail(t => t.Id == request.TournamentId 
                 && t.InvitationCode == ExtractInvitationCode(request.Code)) ??
                     throw new UseCaseException($"Tournament Not Found.",
                     "NotFound", (int)HttpStatusCode.NotFound);
 
-                if (getTournament.Status == TournamentStatus.Draft)
+                if (getTournament.Status != TournamentStatus.Upcoming)
                 {
                     throw new UseCaseException($"Tournament Is Not Yet Publish.",
                     "NotYetPublish", (int)HttpStatusCode.NotFound);
@@ -60,12 +59,12 @@ namespace UseCase.Commands.InvitationCommand
 
                     var playerType = ExtractFirstPrefix(request.Code);
 
-                    if (playerType == "First11")
+                    if (playerType.Contains("First11"))
                     {
                         getTournament.AddPlayerToTeam(player);
                     }
 
-                    if (playerType == "Subtitute")
+                    if (playerType.Contains("Subtitute"))
                     {
                         getTournament.AddSubPlayerToTeam(player);
                     }

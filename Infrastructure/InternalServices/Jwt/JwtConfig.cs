@@ -17,7 +17,7 @@ namespace Infrastructure.InternalServices.Jwt
         }
         private SigningCredentials GetSigningCredentials()
         {
-            var secret = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY"));
+            var secret = Encoding.UTF8.GetBytes(_jwtSettings.Key);
             return new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256);
         }
         public async Task<IEnumerable<Claim>> GetClaimsAsync(User user)
@@ -36,7 +36,7 @@ namespace Infrastructure.InternalServices.Jwt
                 issuer: _jwtSettings.Issuer,           
                 audience: _jwtSettings.Audience,       
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInDays),
+                expires: DateTime.UtcNow.AddDays(_jwtSettings.DurationInDays),
                 signingCredentials: signingCredentials);
 
             var tokenHandler = new JwtSecurityTokenHandler();

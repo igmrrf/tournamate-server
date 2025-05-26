@@ -25,13 +25,13 @@ namespace UseCase.Commands.InvitationCommand
         {
             public async Task Handle(ManagerAcceptInviteCOmmand request, CancellationToken cancellationToken)
             {
-                var getTournament = await tournamentRepository.GetAsync(t => t.Id == request.TournamentId
+                var getTournament = await tournamentRepository.GetTournamentDetail(t => t.Id == request.TournamentId
                 && t.InvitationCode == request.Code) ??
                     throw new UseCaseException($"Tournament Not Found.",
                     "NotFound", (int)HttpStatusCode.NotFound);
 
 
-                if( getTournament.Status == TournamentStatus.Draft)
+                if( getTournament.Status != TournamentStatus.Upcoming)
                 {
                     throw new UseCaseException($"Tournament Is Not Yet Publish.",
                     "NotYetPublish", (int)HttpStatusCode.NotFound);
