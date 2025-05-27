@@ -39,7 +39,7 @@ namespace Domain.Entities
 
         public Tournament() { }
 
-        public void StartTournament()
+        public TournamentSchedule StartTournament()
         {
             if (Status != TournamentStatus.Upcoming)
                 throw new DomainException("Only published tournaments can be started");
@@ -53,7 +53,21 @@ namespace Domain.Entities
             GenerateTournamentMatches();
             Status = TournamentStatus.Ongoing;
             //AddDomainEvent(new TournamentStartedEvent(Id));
-        }   
+
+            return new TournamentSchedule(
+            Id,
+            Rounds.Select(r => new RoundSchedule(
+                r.RoundNumber,
+                r.Matches.Select(m => new MatchSchedule(
+                    m.Id,
+                    m.HomeId,
+                    m.AwayId,
+                    MatchStatus.Shedulled
+                )).ToList()
+            )).ToList()
+        );
+        }
+
         public void GenerateTournamentMatches()
         {
             if (Status == TournamentStatus.Draft)
@@ -298,7 +312,7 @@ namespace Domain.Entities
         }
         public void AddTeam(Team team)
         {
-            if (CurrentTeamCount > NoOfTeams)
+            if (CurrentTeamCount >= NoOfTeams)
             {
                 throw new DomainException("Tournament Team limit reached");
             }
@@ -308,11 +322,21 @@ namespace Domain.Entities
         }
         public void AddPlayerToTeam(Player player)
         {
+            if (TournamentMode == TournamentMode.PlayerVsPlayer)
+            {
+                throw new DomainException("Team is not required in Player vs Player mode");
+            }
+            
             _teams.FirstOrDefault(t => t.Id == player.TeamId)?.AddPlayerToTeam(player);
         }
 
         public void AddSubPlayerToTeam(Player player)
         {
+            if (TournamentMode == TournamentMode.PlayerVsPlayer)
+            {
+                throw new DomainException("Team is not required in Player vs Player mode");
+            }
+            
             _teams.FirstOrDefault(t => t.Id == player.TeamId)?.AddSubPlayerToTeam(player);
         }
         public void AddPlayer(Player player)
@@ -334,7 +358,8 @@ namespace Domain.Entities
         public void RemovePlayer(Guid playerId)
         {
             var player = _players.FirstOrDefault(p => p.Id == playerId);
-            if (player == null) return;
+            if (player == null) 
+                throw new DomainException("Player not found");
 
             _players.Remove(player);
             CurrentPlayerCount--;
@@ -343,7 +368,8 @@ namespace Domain.Entities
         public void RemoveTeam(Guid teamId)
         {
             var team = _teams.FirstOrDefault(t => t.Id == teamId);
-            if (team == null) return;
+            if (team == null)
+                throw new DomainException("Team not found");
 
             _teams.Remove(team);
             CurrentTeamCount--;
@@ -352,20 +378,52 @@ namespace Domain.Entities
         public void RemovePlayerFromTeam(Guid PlayerId, Guid teamId)
         {
             var team = _teams.FirstOrDefault(t => t.Id == teamId);
-            if (team == null) return;
+            if (team == null)
+                throw new DomainException("Team not found");
 
             var player = team.Players.FirstOrDefault(p => p.Id == PlayerId);
-            if (player == null) return;
+            if (player == null)
+                throw new DomainException("Player not found");
 
-            team.Players.Remove(player);
-            CurrentPlayerCount--;
+            team.RemovePlayerFromTeam(PlayerId);
         }
 
+        public void RemoveSubPlayerFromTeam(Guid playerId, Guid teamId)
+        {
+            var team = _teams.FirstOrDefault(t => t.Id == teamId);
+            if (team == null) 
+                throw new DomainException("Team not found");
 
+            var player = team.Players.FirstOrDefault(p => p.Id == playerId);
+            if (player == null)
+                throw new DomainException("Player not found");
+
+            team.RemoveSubPlayerFromTeam(playerId);
+        }
+
+        public void UpdatePlayer(Guid playerId, string name, string position, string jerseyNumber)
+        {
+            var player = _players.FirstOrDefault(t => t.Id == playerId);
+            if (player == null)
+                throw new DomainException("Player not found");
+
+            player.UpdatePlayer(name, position, jerseyNumber);
+        }
+
+        public void UpdateTeam(Guid teamId, string name, string? logo)
+        {
+            var team = _teams.FirstOrDefault(t => t.Id == teamId);
+            if (team == null)
+                throw new DomainException("Team not found");
+            team.UpdateTeam(name, logo);
+        }
 
         public void CancelTournament(Tournament tournament)
         {
             tournament.Status = TournamentStatus.Cancelled;
+            //tournament.Matches.Clear();
+            //tournament._teams.Clear();
+            //tournament._players.Clear();
         }
 
         public void SaveToDraft(Tournament tournament)

@@ -1,5 +1,7 @@
-﻿using MediatR;
+﻿using Domain.Shared.Enum;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using UseCase.Queries.Matches;
 using static UseCase.Queries.Matches.MatchesInTournamentRound;
 
 namespace Api.Controllers
@@ -16,6 +18,15 @@ namespace Api.Controllers
             var request = new GetMatchesInRoundHandler(tournamentId, round);
             var result = await mediator.Send(request);
             return Ok(result);
+        }
+
+        [HttpGet("current-round/{tournamentId}")]
+        public async Task<IActionResult> GetCurrentRound(Guid tournamentId, CancellationToken cancellationToken)
+        {
+            var request = new GetCurrentRound.CurrentRoundCommand(tournamentId);
+
+            var response = await mediator.Send(request, cancellationToken);
+            return Ok(response);
         }
     }
 }

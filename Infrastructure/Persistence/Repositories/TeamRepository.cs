@@ -11,20 +11,13 @@ namespace Infrastructure.Persistence.Repositories
 {
     public class TeamRepository(ApplicationDbContext context) : ITeamRepository
     {
-        public async Task<Team> CreateAsync(Team team)
-        {
-            await context.AddAsync(team);
-            return team;
-        }
-
-        public async Task DeleteAsync(Team team)
-        {
-            context.Remove(team);
-        }
+        
 
         public async Task<Team?> GetAsync(Expression<Func<Team, bool>> predicate)
         {
-            return await context.Team.FirstOrDefaultAsync(predicate);
+            return await context.Team
+                .Include(t => t.Players)
+                .FirstOrDefaultAsync(predicate);
         }
 
         public async Task<bool> IsExistsAsync(Expression<Func<Team, bool>> expression)
@@ -32,9 +25,5 @@ namespace Infrastructure.Persistence.Repositories
             return await context.Team.AnyAsync(expression);
         }
 
-        public async Task UpdateTournament(Team team)
-        {
-            context.Update(team);
-        }
     }
 }

@@ -49,14 +49,14 @@ namespace UseCase.Commands.InvitationCommand
                     "NotApplied", (int)HttpStatusCode.NotFound);
                 }
 
+
                 var user = await userService.LoggedInUser() ?? throw new NullReferenceException($"User not found.");
 
                 var team = new Team(request.TeamName, request.TeamLogo, user.Id, request.TournamentId, 
                     getTournament.NoOfPlayers, getTournament.NoOfSubPlayers, request.Code);
 
-                getTournament.AddParticipant(user.Id, Role.Manager);
                 getTournament.AddTeam(team);
-                await teamRepository.CreateAsync(team);
+                getTournament.AddParticipant(user.Id, Role.Manager);
 
                 await unitOfWork.SaveChangesAsync(cancellationToken);
             }

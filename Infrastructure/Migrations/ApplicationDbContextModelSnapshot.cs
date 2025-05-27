@@ -252,6 +252,12 @@ namespace Infrastructure.Migrations
                     b.Property<Guid?>("CreatedById")
                         .HasColumnType("char(36)");
 
+                    b.Property<int>("CurrentPlayerCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CurrentSubPlayerCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("Logo")
                         .HasColumnType("longtext");
 

@@ -45,14 +45,6 @@ namespace Domain.Aggregate.TournamentAggregate
             JerseyNumber = jerseyNumber ?? JerseyNumber;
         }
 
-        // public void RemoveFromTeam()
-        // {
-        //     if (TeamId == null)
-        //         throw new DomainException("Player is not assigned to any team.", nameof(TeamId));
-        //     TeamId = null;
-        // }
-
-
     }
 }
     

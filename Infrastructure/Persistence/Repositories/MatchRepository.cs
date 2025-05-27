@@ -10,16 +10,9 @@ namespace Infrastructure.Persistence.Repositories
 {
     public class MatchRepository(ApplicationDbContext context) : IMatchRepository
     {
-        public async  Task<Match> CreateAsync(Match match)
-        {
-            await context.AddAsync(match);
-            return match;
-        }
+        
 
-        public async Task DeleteAsync(Match match)
-        {
-             context.Remove(match);
-        }
+       
 
         public async Task<Match?> GetAsync(Expression<Func<Match, bool>> predicate)
         {
@@ -45,9 +38,6 @@ namespace Infrastructure.Persistence.Repositories
             return await march.ToListAsync();
         }
 
-        public async Task UpdateMatch(Match match)
-        {
-            context.Update(match);
-        }
+       
     }
 }

@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UseCase.Commands.TournamentCommand;
 using UseCase.Contracts.Services;
 using static UseCase.Commands.InvitationCommand.ManagerAcceptInvitation;
 using static UseCase.Commands.InvitationCommand.PlayerAcceptInvitation;
@@ -93,8 +94,12 @@ namespace Api.Controllers
         public async Task<IActionResult> StartTournament([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
         {
             var request = new StartTournamentCommand(tournamentId);
-            await mediator.Send(request, cancellationToken);
-            return Ok();
+            var response = await mediator.Send(request, cancellationToken);
+            if (response.IsSuccessful)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
 
         [Authorize]
@@ -161,6 +166,15 @@ namespace Api.Controllers
             var request = new GetUserTournament(status);
             var response = await mediator.Send(request, cancellationToken);
             return Ok(response);
+        }
+
+        [Authorize]
+        [HttpPut("Cancel-Tournamnet/{tournamentId}")]
+        public async Task<IActionResult> CancelTournament([FromRoute] Guid tournamentId, CancellationToken cancellationToken)
+        {
+            var request = new CancelTournament.CancelTournamentCommand(tournamentId);
+            await mediator.Send(request, cancellationToken);
+            return Ok("Tournament Cancelled");
         }
     }
 }

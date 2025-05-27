@@ -9,9 +9,6 @@ namespace UseCase.Contracts.Repositories
     {
         Task<Match?> GetAsync(Expression<Func<Match, bool>> predicate);
         Task<List<Match>> ListOfMatch(Expression<Func<Match, bool>> predicate);
-        Task<Match> CreateAsync(Match match);
         Task<bool> IsExistsAsync(Expression<Func<Match, bool>> expression);
-        Task UpdateMatch(Match match);
-        Task DeleteAsync(Match match);
     }
 }

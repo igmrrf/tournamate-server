@@ -13,6 +13,8 @@ namespace Domain.Aggregate.TournamentAggregate
         //public List<Player> SubPlayers { get; private set; } = new();
         public int NoOfPlayer { get; private set; }
         public int NoOfSubPlayer { get; private set; }
+        public int CurrentPlayerCount { get; private set; }
+        public int CurrentSubPlayerCount { get; private set; }
         public Guid UserId { get; private set; }
         public Guid TournamentId { get; private set; }
         public string Code { get; private set; }
@@ -26,6 +28,8 @@ namespace Domain.Aggregate.TournamentAggregate
             NoOfSubPlayer = NoOfSubPlayer;
             NoOfPlayer =  noOfPlayers;
             Code = code;
+            CurrentSubPlayerCount = 0;
+            CurrentPlayerCount = 0;
         }
 
         public void UpdateTeam(string name, string? logo)
@@ -36,24 +40,31 @@ namespace Domain.Aggregate.TournamentAggregate
 
         public void AddPlayerToTeam(Player player)
         {
-            if (NoOfPlayer > NoOfPlayer)
-                throw new DomainException("Cannot add more players to the team.");
+            if (CurrentPlayerCount >= NoOfPlayer)
+            {
+                throw new DomainException("Team player limit reached");
+            }
             Players.Add(player);
+            CurrentPlayerCount++;
         }
 
         public void AddSubPlayerToTeam(Player player)
         {
-            if (NoOfSubPlayer > NoOfSubPlayer)
-                throw new DomainException("Cannot add more players to the team.");
+            if(CurrentSubPlayerCount >= NoOfSubPlayer)
+            {
+                throw new DomainException("Team substitute player limit reached");
+            }
             Players.Add(player);
+            CurrentSubPlayerCount++;
         }
 
-        public void UpdatePlayerInTeam(Guid playerId, string name, string position, string jerseyNumber)
+        public void RemoveSubPlayerFromTeam(Guid playerId)
         {
             var player = Players.FirstOrDefault(p => p.Id == playerId);
             if (player == null)
-                throw new DomainException("Player not found in the team.");
-            player.UpdatePlayer(name, position, jerseyNumber);
+                throw new DomainException("Substitute player not found in the team.");
+            Players.Remove(player);
+            CurrentSubPlayerCount--;
         }
 
         public void RemovePlayerFromTeam(Guid playerId)
@@ -62,6 +73,7 @@ namespace Domain.Aggregate.TournamentAggregate
             if (player == null)
                 throw new DomainException("Player not found in the team.");
             Players.Remove(player);
+            CurrentPlayerCount--;
         }
 
     }

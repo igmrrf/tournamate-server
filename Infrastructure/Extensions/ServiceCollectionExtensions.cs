@@ -25,6 +25,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IRoleRepository, RoleRepository>()
             .AddScoped<IMatchRepository, MatchRepository>()
             .AddScoped<IPermissionRepository, PermissionRepository>()
+            .AddScoped<IPlayerRepository, PlayerRepository>()
             ;
     }
 

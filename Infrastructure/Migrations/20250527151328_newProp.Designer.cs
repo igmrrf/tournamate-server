@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250523184349_second")]
-    partial class second
+    [Migration("20250527151328_newProp")]
+    partial class newProp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -254,6 +254,12 @@ namespace Infrastructure.Migrations
 
                     b.Property<Guid?>("CreatedById")
                         .HasColumnType("char(36)");
+
+                    b.Property<int>("CurrentPlayerCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CurrentSubPlayerCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("Logo")
                         .HasColumnType("longtext");
