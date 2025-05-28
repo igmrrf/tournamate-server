@@ -61,7 +61,7 @@ namespace Infrastructure.InternalServices.EmailService
 
         <p style='font-size: 16px; color: #333333;'>Hello <strong>{name}</strong>,</p>
         <p style='font-size: 16px; color: #333333;'>
-            Thank you for signing up. Please use the following **5-digit code** to verify your email address:
+            Thank you for signing up. Please use the following **4-digit code** to verify your email address:
         </p>
 
         <div style='text-align: center; margin: 30px 0;'>
@@ -104,7 +104,7 @@ namespace Infrastructure.InternalServices.EmailService
 
         <p style='font-size: 16px; color: #333333;'>Hello <strong>{name}</strong>,</p>
         <p style='font-size: 16px; color: #333333;'>
-            You requested for a forgot Password code. Please use the following **5-digit code** to reset your password:
+            You requested for a forgot Password code. Please use the following **4-digit code** to reset your password:
         </p>
 
         <div style='text-align: center; margin: 30px 0;'>

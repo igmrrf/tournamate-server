@@ -32,7 +32,7 @@ namespace UseCase.Services
         public string GenerateRandom5DigitCode()
         {
             Random random = new Random();
-            int code = random.Next(10000, 100000); 
+            int code = random.Next(1000, 10000); 
             return code.ToString();
         }
 
