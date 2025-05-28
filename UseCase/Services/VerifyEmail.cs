@@ -25,8 +25,8 @@ namespace UseCase.Services
 
                 if (getUser.VerificationTokenExpiry < DateTime.UtcNow) 
                 {
-                    throw new UseCaseException($"Verification Link TimeOut",
-                        "VerificationLinkTimeOut", (int)HttpStatusCode.NotFound);
+                    throw new UseCaseException($"Verification code TimeOut",
+                        "VerificationCodeTimeOut", (int)HttpStatusCode.NotFound);
                 }
 
                 getUser.Verify(request.userId);

@@ -12,18 +12,17 @@ namespace UseCase.Commands.UserCommand
 {
     public class UserSignUp
     {
-        public record UserSignUpCommand : IRequest
+        public record UserSignUpCommand : IRequest<Guid>
         {
             public required string UserName { get; set; } 
             public required string Email { get; set; }
             public required string Country { get; set; }
             public required string Password { get; set; }
-            public required string Url { get; set; }
         }
 
-        public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, IEmailProvider emailProvider, IGenerateToken tokenGenerator) : IRequestHandler<UserSignUpCommand>
+        public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, IEmailProvider emailProvider, IGenerateToken tokenGenerator) : IRequestHandler<UserSignUpCommand, Guid>
         {
-            public async Task Handle(UserSignUpCommand command, CancellationToken cancellationToken)
+            public async Task<Guid> Handle(UserSignUpCommand command, CancellationToken cancellationToken)
             {
                 var getEmail = await userRepository.IsExistsAsync(e =>  e.Email == command.Email);
                 if (getEmail)
@@ -41,13 +40,11 @@ namespace UseCase.Commands.UserCommand
 
                 await unitOfWork.SaveChangesAsync(cancellationToken);
 
-                var response = await tokenGenerator.GenerateEmailConfirmationToken(command.Email);
+                var code = await tokenGenerator.GenerateEmailConfirmationToken(command.Email);
 
-                var callBackUrl = $"{command.Url}?userId={response.UserId}&token={response.Token}";
+                await emailProvider.SendEmailVerificationMessage(command.UserName, command.Email, code);
 
-                await emailProvider.SendEmailVerificationMessage(response.Name, command.Email, callBackUrl);
-
-                
+                return newUser.Id;
             }
         }
     }

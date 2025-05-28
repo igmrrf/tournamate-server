@@ -23,8 +23,8 @@ namespace UseCase.Services
 
                 if (getUser.PasswordResetTokenExpiry < DateTime.UtcNow)
                 {
-                    throw new UseCaseException($"Verification Link TimeOut",
-                        "VerificationLinkTimeOut", (int)HttpStatusCode.Gone);
+                    throw new UseCaseException($"Verification Code TimeOut",
+                        "VerificationCodeTimeOut", (int)HttpStatusCode.NotFound);
                 }
 
                 var salt = BCrypt.Net.BCrypt.GenerateSalt(10);

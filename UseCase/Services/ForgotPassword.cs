@@ -10,7 +10,7 @@ namespace UseCase.Services
 {
     public class ForgotPassword
     {
-        public record ForgotPasswordCommand(string Email, string Url) : IRequest;
+        public record ForgotPasswordCommand(string Email) : IRequest;
 
         public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, IEmailProvider emailProvider, IGenerateToken generateToken) : IRequestHandler<ForgotPasswordCommand>
         {
@@ -23,11 +23,9 @@ namespace UseCase.Services
                         "NotFound", (int)HttpStatusCode.NotFound);
                 }
 
-                var token = await generateToken.GeneratePasswordResetToken(request.Email);
+                var code = await generateToken.GeneratePasswordResetToken(request.Email);
 
-                var callBackUrl = $"{request.Url}?userId={token.UserId}&token={token.Token}";
-
-                await emailProvider.SendForgotPasswordLink(getUser.UserName,  request.Email, callBackUrl);
+                await emailProvider.SendForgotPasswordLink(getUser.UserName,  request.Email, code);
             }
         }
     }

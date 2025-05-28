@@ -24,8 +24,8 @@ namespace Api.Controllers
                 return BadRequest("Input Invalid");
             }
 
-            await mediator.Send(request, cancellationToken);
-            return Ok();
+            var response = await mediator.Send(request, cancellationToken);
+            return Ok(response);
         }
 
         [HttpPost("Login")]

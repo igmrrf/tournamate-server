@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UseCase.Commands.TeamCommand;
 
@@ -8,6 +9,7 @@ namespace Api.Controllers
     [ApiController]
     public class TeamController(IMediator mediator) : ControllerBase
     {
+        [Authorize]
         [HttpPut("Remove-Player/{ playerId}")]
         public async Task<IActionResult> RemovePlayer([FromRoute] Guid playerId, CancellationToken cancellationToken)
         {
@@ -16,6 +18,7 @@ namespace Api.Controllers
             return Ok($"Player removed from tournament.");
         }
 
+        [Authorize]
         [HttpPut("Remove-Team/{ teamId}")]
         public async Task<IActionResult> RemoveTeam([FromRoute] Guid teamId, CancellationToken cancellationToken)
         {
@@ -24,6 +27,7 @@ namespace Api.Controllers
             return Ok($"Team removed from tournament.");
         }
 
+        [Authorize]
         [HttpPut("RemovePlayer-Team/{ teamId}/{ playerId}")]
         public async Task<IActionResult> RemovePlayerTeam([FromRoute] Guid teamId, Guid playerId, CancellationToken cancellationToken)
         {
@@ -32,6 +36,7 @@ namespace Api.Controllers
             return Ok($"Player removed from Team.");
         }
 
+        [Authorize]
         [HttpPut("RemoveSubPlayer-Team/{ teamId}/{ playerId}")]
         public async Task<IActionResult> RemoveSubPlayer([FromRoute] Guid teamId, Guid playerId, CancellationToken cancellationToken)
         {
@@ -40,6 +45,7 @@ namespace Api.Controllers
             return Ok($"Player removed from Team.");
         }
 
+        [Authorize]
         [HttpPost("Update-Player")]
         public async Task<IActionResult> UpdatePlayer([FromBody] UpdatePlayer.UpdatePlayerCommand request, CancellationToken cancellationToken)
         {
@@ -47,6 +53,7 @@ namespace Api.Controllers
             return Ok($"Player updated successfully.");
         }
 
+        [Authorize]
         [HttpPost("Update-Team")]
         public async Task<IActionResult> UpdateTeam([FromBody] UpdateTeam.UpdateTeamCommand request, CancellationToken cancellationToken)
         {

@@ -47,7 +47,7 @@ namespace Infrastructure.InternalServices.EmailService
             }
         }
 
-        public async Task SendEmailVerificationMessage(string name, string email, string callbackUrl)
+        public async Task SendEmailVerificationMessage(string name, string email, string code)
         {
             string subject = "Email Verification";
             string html = $@"
@@ -61,17 +61,18 @@ namespace Infrastructure.InternalServices.EmailService
 
         <p style='font-size: 16px; color: #333333;'>Hello <strong>{name}</strong>,</p>
         <p style='font-size: 16px; color: #333333;'>
-            Thank you for signing up. Please verify your email address by clicking the button below:
+            Thank you for signing up. Please use the following **5-digit code** to verify your email address:
         </p>
 
         <div style='text-align: center; margin: 30px 0;'>
-            <a href='{callbackUrl}' style='display: inline-block; padding: 12px 24px; font-size: 16px; color: #ffffff; background-color: #27ae60; text-decoration: none; border-radius: 5px;'>
-                Confirm Your Email
-            </a>
+            <p style='font-size: 32px; font-weight: bold; color: #27ae60; background-color: #e8f5e9; padding: 15px 25px; border-radius: 8px; display: inline-block; letter-spacing: 5px;'>
+                {code}
+            </p>
         </div>
 
-        <p style='font-size: 14px; color: #666666;'>If the button above doesn't work, copy and paste this URL into your browser:</p>
-        <p style='font-size: 14px; color: #666666; word-break: break-all;'>{callbackUrl}</p>
+        <p style='font-size: 14px; color: #666666;'>
+            Enter this code on the verification page to complete your registration. This code is valid for a limited time.
+        </p>
 
         <hr style='margin: 30px 0; border: none; border-top: 1px solid #eeeeee;'/>
         <p style='font-size: 14px; color: #999999;'>Best regards,<br/>The TOURNAMATE Team</p>
@@ -89,7 +90,7 @@ namespace Infrastructure.InternalServices.EmailService
             await SendEmailAsync(model);
         }
 
-        public async Task SendForgotPasswordLink(string name, string email, string callbackUrl)
+        public async Task SendForgotPasswordLink(string name, string email, string code)
         { 
             string subject = "Reset Password";
             string html = $@"
@@ -103,17 +104,18 @@ namespace Infrastructure.InternalServices.EmailService
 
         <p style='font-size: 16px; color: #333333;'>Hello <strong>{name}</strong>,</p>
         <p style='font-size: 16px; color: #333333;'>
-            You requested for a forgotpassword link. Please verify your password link by clicking the button below:
+            You requested for a forgot Password code. Please use the following **5-digit code** to reset your password:
         </p>
 
         <div style='text-align: center; margin: 30px 0;'>
-            <a href='{callbackUrl}' style='display: inline-block; padding: 12px 24px; font-size: 16px; color: #ffffff; background-color: #27ae60; text-decoration: none; border-radius: 5px;'>
-                Confirm Your Email
-            </a>
+            <p style='font-size: 32px; font-weight: bold; color: #27ae60; background-color: #e8f5e9; padding: 15px 25px; border-radius: 8px; display: inline-block; letter-spacing: 5px;'>
+                {code}
+            </p>
         </div>
 
-        <p style='font-size: 14px; color: #666666;'>If the button above doesn't work, copy and paste this URL into your browser:</p>
-        <p style='font-size: 14px; color: #666666; word-break: break-all;'>{callbackUrl}</p>
+        <p style='font-size: 14px; color: #666666;'>
+            Enter this code on the reset password page to reset your password. This code is valid for a limited time.
+        </p>
 
         <hr style='margin: 30px 0; border: none; border-top: 1px solid #eeeeee;'/>
         <p style='font-size: 14px; color: #999999;'>Best regards,<br/>The TOURNAMATE Team</p>
